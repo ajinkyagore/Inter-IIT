@@ -11,7 +11,7 @@ Full documentation is provided at http://python.dronekit.io/examples/simple_goto
 """
 
 from __future__ import print_function
-import time
+import time,math
 from dronekit import connect, VehicleMode, LocationGlobalRelative
 from pymavlink import mavutil
 
