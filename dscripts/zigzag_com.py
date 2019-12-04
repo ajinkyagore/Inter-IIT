@@ -33,10 +33,11 @@ if not connection_string:
 print('Connecting to vehicle on: %s' % connection_string)
 vehicle = connect(connection_string, wait_ready=True, baud=57600)
 
-final_height = 1
+final_height = 2
 final_north = 5
 final_east = 2
 
+vehicle.parameters['WPNAV_SPEED'] = 30
 def get_location_metres(original_location, dNorth, dEast):
     """
     Returns a LocationGlobal object containing the latitude/longitude `dNorth` and `dEast` metres from the 
@@ -118,7 +119,7 @@ def zigzag(aLocation, north, east, height):
     # Add new commands. The meaning/order of the parameters is documented in the Command class. 
      
     #Add MAV_CMD_NAV_TAKEOFF command. This is ignored if the vehicle is already in the air.
-    cmds.add(Command( 0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_TAKEOFF, 0, 0, 0, 0, 0, 0, 0, 0, 10))
+    cmds.add(Command( 0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_TAKEOFF, 0, 0, 0, 0, 0, 0, 0, 0, height))
 
     #Define the four MAV_CMD_NAV_WAYPOINT locations and add the commands
     point1 = get_location_metres(aLocation,  north, 0)
@@ -174,7 +175,10 @@ def arm_and_takeoff(aTargetAltitude):
         
 def update_firebase(fire_count):
     
-    
+
+
+
+     
     lat = vehicle.location.global_relative_frame.lat
     lon = vehicle.location.global_relative_frame.lon
     firebase.put('/drone1/obj'+str(fire_count),"lat",lat)
@@ -213,10 +217,14 @@ while True:
     #     fire_count += 1
     #     update_firebase(fire_count)
 
+
+
+    fire_count  +=1
     update_firebase(fire_count)
+    
 
     fire_total_count = fire_count
-    firebase.put('/',"count", fire_total_count)
+    firebase.put('/',"count1", fire_total_count)
 
 
     nextwaypoint=vehicle.commands.next
