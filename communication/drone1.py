@@ -23,8 +23,9 @@ while True:
     if obj_detected:
         count1 += 1
         update_firebase(str_gps,count1)#only if object detected
-    count_total=count1+firebase.get('/count2',None)+firebase.get('/count3',None)#run forever
-    firebase.put('/',"count",count_total)#run forever
+    count_total=count+firebase.get('/count2',None)+firebase.get('/count3',None)
+    firebase.put('/',"countT1",count_total)
+    sleep(1)
     # is_count_full(count_total)
         # this function will check if total count is > 5 -> RTL
-    sleep(1)
+    
