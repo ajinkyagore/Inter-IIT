@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <script type = "text/JavaScript">
+    	<script type = "text/JavaScript">
          <!--
             function AutoRefresh( t ) {
                setTimeout("location.reload(true);", t);
@@ -98,6 +98,11 @@
                 });
                 console.log('Map initialised');
             }
+            function write_count(cars_count)
+                {
+                    cars_ref=firebase.database().ref('/');
+                    cars_ref.update({count: cars_count});
+                }
             // This Function will create a car icon with angle and add/display that marker on the map icon should be of the drones (boxes)
             function AddCar(data) {
                 var icon = { // car icon
@@ -117,6 +122,7 @@
                     map: map
                 });
                 markers[data.key] = marker; // add marker in the markers array...
+                write_count(cars_count);
                 document.getElementById("cars").innerHTML = cars_count;
                 console.log('drone added!!');
                 console.log(data.val().lat);
