@@ -28,6 +28,7 @@ while True:
         count += 1
         update_firebase(str_gps,count)
         sleep(1)
-    count_total=firebase.get('/count',None)
+    count_total=firebase.get('/count1',None)+firebase.get('/count2',None)+count
+    firebase.put('/',"countT3",count_total)
     # is_count_full(count_total)
         # this function will check if total count is > 5 -> RTL
