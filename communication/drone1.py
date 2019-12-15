@@ -2,8 +2,8 @@ from time import sleep
 from firebase import firebase
 
 
-import urllib2, urllib, httplib
-import json
+#import urllib2, urllib, httplib
+#import json
 
 firebase = firebase.FirebaseApplication('https://inter-iit-drone-2020.firebaseio.com/', None)
 str_gps="23.34566,78.45766"
