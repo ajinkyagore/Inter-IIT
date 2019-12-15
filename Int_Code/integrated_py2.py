@@ -26,8 +26,8 @@ from keras.preprocessing import image
 
 #communication imports
 from firebase import firebase
-import urlib2, urlib, httplib
-import json
+#import urlib2, urlib, httplib
+#import json
 
 #parameters for mission
 final_height = 2
