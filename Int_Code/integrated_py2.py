@@ -236,7 +236,7 @@ print("changed to AUTO Mode")
 while True:
     print_timer = time.time()
 
-    while((time.time() - print_timer) < 1):
+    if((time.time() - print_timer) < 1):
         nextwaypoint=vehicle.commands.next
         print('Distance to waypoint (%s): %s' % (nextwaypoint, distance_to_current_waypoint()))
         print('Height:', vehicle.location.global_relative_frame.alt)
