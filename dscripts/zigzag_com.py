@@ -223,8 +223,7 @@ while True:
     update_firebase(fire_count)
     
 
-    fire_total_count = fire_count
-    firebase.put('/',"count1", fire_total_count)
+    fire_total_count = firebase.get('/count',None)
 
 
     nextwaypoint=vehicle.commands.next
