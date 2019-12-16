@@ -26,7 +26,7 @@ from keras.preprocessing import image
 
 #communication imports
 from firebase import firebase
-import urlib3, urlib, http.client
+import urllib3, urllib, http.client
 import json
 
 #Set up option parsing to get connection string
@@ -55,7 +55,7 @@ print('Connecting to vehicle on: %s' % connection_string)
 if sitl is not None:
     vehicle = connect(connection_string, wait_ready=True)
 else:
-    vehicle = connect(connection_string="/dev/ttyACM0", wait_ready=True, baud=57600)
+    vehicle = connect(connection_string, wait_ready=True, baud=57600)
 
 print('Connected via', connection_string)
 
