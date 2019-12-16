@@ -57,7 +57,11 @@ print("Started Camera")
 
 # Connect to the Vehicle
 print('Connecting to vehicle on: %s' % connection_string)
-vehicle = connect(connection_string, wait_ready=True, baud=57600)
+if sitl is not None:
+    vehicle = connect(connection_string, wait_ready=True)
+else:
+    vehicle = connect(connection_string="/dev/ttyACM0", wait_ready=True, baud=57600)
+
 print('Connected via', connection_string)
 
 # firebase initialisation
@@ -233,11 +237,13 @@ print("changed to AUTO Mode")
 # Uses distance_to_current_waypoint(), a convenience function for finding the 
 #   distance to the next waypoint.
 
-while True:
-    print_timer = time.time()
+print_timer = time.time()
 
-    if((time.time() - print_timer) < 1):
-        nextwaypoint=vehicle.commands.next
+while True:
+
+    nextwaypoint=vehicle.commands.next
+
+    if((time.time() - print_timer) > 1):
         print('Distance to waypoint (%s): %s' % (nextwaypoint, distance_to_current_waypoint()))
         print('Height:', vehicle.location.global_relative_frame.alt)
         print_timer = time.time()
@@ -271,7 +277,7 @@ while True:
         update_firebase(count1)
     # />
 
-    if nextwaypoint==6: #Dummy waypoint - as soon as we reach waypoint 4 this is true and we exit.
+    if nextwaypoint==6 & cv2.waitKey(1) & 0xFF == ord('q'): #Dummy waypoint - as soon as we reach waypoint 4 this is true and we exit.
         print("Exit 'standard' mission when start heading to final waypoint (5)")
         break;
 
