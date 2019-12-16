@@ -208,8 +208,8 @@ def arm_and_takeoff(aTargetAltitude):
         
 #firebase functions
 def update_firebase(count):
-    lat=v.location.global_relative_frame.lat 
-    lon=v.location.global_relative_frame.lon 
+    lat=vehicle.location.global_relative_frame.lat 
+    lon=vehicle.location.global_relative_frame.lon 
     firebase.put('/drone1/obj'+str(count1),"lat",lat)
     firebase.put('/drone1/obj'+str(count1),"lng",lon)
     firebase.put('/',"count1",count1)   
@@ -268,7 +268,7 @@ while True:
         print("****************************************")
         print("****************************************")
         print("----------------------------------------")
-        print("At GPS location: ", v.location.global_relative_frame)
+        print("At GPS location: ", vehicle.location.global_relative_frame)
         print("----------------------------------------")
         print("****************************************")
 
