@@ -29,11 +29,6 @@ from firebase import firebase
 #import urlib2, urlib, httplib
 #import json
 
-#parameters for mission
-final_height = 2
-final_north = 5
-final_east = 2
-
 #Set up option parsing to get connection string
 parser = argparse.ArgumentParser(description='Demonstrates basic mission operations.')
 parser.add_argument('--connect', 
@@ -68,6 +63,12 @@ print('Connected via', connection_string)
 firebase = firebase.FirebaseApplication('https://inter-iit-drone-2020.firebaseio.com/', None)
 count1 = 0
 obj_detected = False
+
+#parameters for mission
+final_height = 2
+final_north = 5
+final_east = 2
+vehicle.parameters['WPNAV_SPEED'] = 50    
 
 # Drone functions
 
