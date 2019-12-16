@@ -8,8 +8,8 @@ from pymavlink import mavutil
 import firebase
 
 #firebase connection string
-firebase = firebase.FirebaseApplication('https://inter-iit-drone-2020.firebaseio.com/', None)
-
+firebase = firebase.FirebaseApplication('https://inter-iit-drdo-sase-2019.firebaseio.com/', None)
+fire_count=0
 
 #Set up option parsing to get connection string
 import argparse  
@@ -173,12 +173,12 @@ def arm_and_takeoff(aTargetAltitude):
         time.sleep(1)
 
         
-def update_firebase(fire_count):
+def update_firebase():
     
 
 
 
-     
+    fire_count=fire_count+1 
     lat = vehicle.location.global_relative_frame.lat
     lon = vehicle.location.global_relative_frame.lon
     firebase.put('/drone1/obj'+str(fire_count),"lat",lat)
@@ -219,8 +219,8 @@ while True:
 
 
 
-    fire_count  +=1
-    update_firebase(fire_count)
+    
+    update_firebase()
     
 
     fire_total_count = firebase.get('/count',None)
