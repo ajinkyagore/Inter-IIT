@@ -5,7 +5,7 @@ from firebase import firebase
 #import urllib2, urllib, httplib
 #import json
 
-firebase = firebase.FirebaseApplication('https://inter-iit-drone-2020.firebaseio.com/', None)
+firebase = firebase.FirebaseApplication('https://inter-iit-drdo-sase-2019.firebaseio.com/', None)
 str_gps="23.34566,78.45766"
 
 count1=0
