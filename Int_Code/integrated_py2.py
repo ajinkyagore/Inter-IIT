@@ -208,13 +208,12 @@ def arm_and_takeoff(aTargetAltitude):
 
         
 #firebase functions
-def update_firebase(count1):
-    count1=count1+1
+def update_firebase(count):
     lat=vehicle.location.global_relative_frame.lat 
     lon=vehicle.location.global_relative_frame.lon 
-    firebase.put('/drone1/obj'+str(count1),"lat",lat)
-    firebase.put('/drone1/obj'+str(count1),"lng",lon)
-    firebase.put('/',"count1",count1)   
+    firebase.put('/drone1/obj'+str(count),"lat",lat)
+    firebase.put('/drone1/obj'+str(count),"lng",lon)
+    firebase.put('/',"count1",count)   
 
 print('Create a new mission (for current location)')
 zigzag(vehicle.location.global_frame,final_north,final_east,final_height)
@@ -275,6 +274,7 @@ while True:
         print("****************************************")
 
         # firebase update
+        count1=count1+1
         update_firebase(count1)
     # />
 
