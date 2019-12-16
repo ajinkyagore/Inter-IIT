@@ -278,7 +278,10 @@ while True:
         update_firebase(count1)
     # />
 
-    if nextwaypoint==6 & cv2.waitKey(1) & 0xFF == ord('q'): #Dummy waypoint - as soon as we reach waypoint 4 this is true and we exit.
+    if cv2.waitKey(1) & 0xFF == ord('q'):
+        break
+
+    if nextwaypoint==6 : #Dummy waypoint - as soon as we reach waypoint 4 this is true and we exit.
         print("Exit 'standard' mission when start heading to final waypoint (5)")
         break;
 
