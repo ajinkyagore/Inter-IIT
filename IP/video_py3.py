@@ -10,7 +10,7 @@ from PIL import Image
 from keras import models
 
 #Load the saved model
-model = models.load_model('interiit1.model')
+model = models.load_model('interiit_model_3.model')
 video = cv2.VideoCapture(0)
 
 while True:
@@ -28,9 +28,11 @@ while True:
         img_array = np.expand_dims(img_array, axis=0)
 
         #Calling the predict method on model to predict 'me' on the image
-        prediction = int(model.predict(img_array)[0][0])
-
+        prediction = (model.predict(img_array)[0][0])
+        print('Prediction:', prediction)
+        prediction = int(prediction)
         #if prediction is 0, which means I am missing on the image, then show the frame in gray color.
+        
         if prediction == 1:
                 frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 

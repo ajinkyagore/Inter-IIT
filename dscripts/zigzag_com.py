@@ -6,6 +6,7 @@ import time
 import math
 from pymavlink import mavutil
 import firebase
+import urllib3, urllib, http.client
 
 #firebase connection string
 firebase = firebase.FirebaseApplication('https://inter-iit-drdo-sase-2019.firebaseio.com/', None)
