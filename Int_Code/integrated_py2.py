@@ -60,7 +60,7 @@ else:
 print('Connected via', connection_string)
 
 # firebase initialisation
-firebase = firebase.FirebaseApplication('https://inter-iit-drone-2020.firebaseio.com/', None)
+firebase = firebase.FirebaseApplication('https://inter-iit-drdo-sase-2019.firebaseio.com/', None)
 count1 = 0
 obj_detected = False
 
@@ -208,7 +208,8 @@ def arm_and_takeoff(aTargetAltitude):
 
         
 #firebase functions
-def update_firebase(count):
+def update_firebase():
+    count1=count1+1
     lat=vehicle.location.global_relative_frame.lat 
     lon=vehicle.location.global_relative_frame.lon 
     firebase.put('/drone1/obj'+str(count1),"lat",lat)
@@ -274,8 +275,7 @@ while True:
         print("****************************************")
 
         # firebase update
-        count1 += 1
-        update_firebase(count1)
+        update_firebase()
     # />
 
     if cv2.waitKey(1) & 0xFF == ord('q'):
