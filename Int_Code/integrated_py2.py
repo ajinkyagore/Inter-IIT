@@ -37,7 +37,7 @@ args = parser.parse_args()
     
 connection_string = args.connect
 sitl = None
-
+count1=0
 
 #Start SITL if no connection string specified
 if not connection_string:
