@@ -37,7 +37,7 @@ args = parser.parse_args()
     
 connection_string = args.connect
 sitl = None
-count1=0
+# count1=0
 
 #Start SITL if no connection string specified
 if not connection_string:
@@ -208,7 +208,7 @@ def arm_and_takeoff(aTargetAltitude):
 
         
 #firebase functions
-def update_firebase():
+def update_firebase(count1):
     count1=count1+1
     lat=vehicle.location.global_relative_frame.lat 
     lon=vehicle.location.global_relative_frame.lon 
@@ -275,7 +275,7 @@ while True:
         print("****************************************")
 
         # firebase update
-        update_firebase()
+        update_firebase(count1)
     # />
 
     if cv2.waitKey(1) & 0xFF == ord('q'):
