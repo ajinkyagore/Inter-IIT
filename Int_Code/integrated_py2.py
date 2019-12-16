@@ -26,8 +26,8 @@ from keras.preprocessing import image
 
 #communication imports
 from firebase import firebase
-import urllib3, urllib, http.client
-import json
+# import urllib3, urllib, http.client
+# import json
 
 #Set up option parsing to get connection string
 parser = argparse.ArgumentParser(description='Demonstrates basic mission operations.')
