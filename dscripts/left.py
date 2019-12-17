@@ -7,6 +7,9 @@ import time
 import math
 from pymavlink import mavutil
 
+from firebase import firebase  
+import urllib3, urllib, http.client
+import json
 
 #Set up option parsing to get connection string
 import argparse  
@@ -25,6 +28,7 @@ if not connection_string:
     sitl = dronekit_sitl.start_default()
     connection_string = sitl.connection_string()
 
+firebase = firebase.FirebaseApplication('https://inter-iit-drdo-sase-2019.firebaseio.com/', None)
 
 # Connect to the Vehicle
 print('Connecting to vehicle on: %s' % connection_string)
@@ -211,6 +215,13 @@ def arm_and_takeoff(aTargetAltitude):
 print('Create a new mission (for current location)')
 move_left(vehicle.location.global_frame,final_north,final_left,final_height)
 
+ground_signal = 0
+
+while(ground_signal == 0):
+    ground_signal = firebase.get('/init1', None)
+    print("Waiting for ground signal...")  
+    time.sleep(1)
+
 
 # From Copter 3.3 you will be able to take off using a mission item. Plane must take off using a mission item (currently).
 arm_and_takeoff(final_height)
@@ -236,7 +247,7 @@ while True:
     # if nextwaypoint==3: #Skip to next waypoint
 #        print('Skipping to Waypoint 5 when reach waypoint 3')
 #        vehicle.commands.next = 5
-    if nextwaypoint==6: #Dummy waypoint - as soon as we reach waypoint 4 this is true and we exit.
+    if nextwaypoint==7: #Dummy waypoint - as soon as we reach waypoint 4 this is true and we exit.
         print("Exit 'standard' mission when start heading to final waypoint (5)")
         break;
     time.sleep(1)
