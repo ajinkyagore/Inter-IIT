@@ -138,7 +138,7 @@
             function reset_all()
                 {
                     cars_ref=firebase.database().ref('/');
-                    cars_ref.update({count:0,
+                    cars_ref.set({count:0,
                                     count1:0,
                                     count2:0,
                                     count3:0,
