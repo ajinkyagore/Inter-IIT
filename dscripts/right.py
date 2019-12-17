@@ -217,8 +217,10 @@ move_right(vehicle.location.global_frame,final_north,final_right,final_height)
 ground_signal = 0
 
 while(ground_signal == 0):
-    ground_signal = firebase.get('/init1', None)
+    ground_signal = firebase.get('/init2', None)
     print("Waiting for ground signal...")  
+    num_sat = int(str(vehicle.gps_0).split('=')[2])
+    firebase.put('/', "sat2", num_sat)
     time.sleep(1)
 
 
