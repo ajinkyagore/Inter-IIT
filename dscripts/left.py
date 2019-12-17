@@ -220,6 +220,8 @@ ground_signal = 0
 while(ground_signal == 0):
     ground_signal = firebase.get('/init1', None)
     print("Waiting for ground signal...")  
+    num_sat = int(str(vehicle.gps_0).split('=')[2])
+    firebase.put('/', "sat1", num_sat)
     time.sleep(1)
 
 
