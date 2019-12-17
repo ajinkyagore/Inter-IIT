@@ -175,9 +175,6 @@ def arm_and_takeoff(aTargetAltitude):
 
         
 def update_firebase():
-    
-
-
 
     fire_count=fire_count+1 
     lat = vehicle.location.global_relative_frame.lat
