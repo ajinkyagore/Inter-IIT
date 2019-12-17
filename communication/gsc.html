@@ -48,6 +48,7 @@
                 <button name = 'button2' value = "OK" type = "button" onclick="write_btn2()"> BTN 2 </button>
                 <button name = 'button3' value = "OK" type = "button" onclick="write_btn3()"> BTN 3 </button>
                 <button name = 'button4' value = "OK" type = "button" onclick="write_btn_all()"> BTN ALL </button>
+                <button name = 'button5' value = "OK" type = "button" onclick="reset_all()"> RESET </button>
             </div>
             <div>
                 <span>Object detected: </span><span id="cars">0</span>
@@ -134,6 +135,21 @@
                     cars_ref=firebase.database().ref('/');
                     cars_ref.update({init_all: 1});
                 }            
+            function reset_all()
+                {
+                    cars_ref=firebase.database().ref('/');
+                    cars_ref.update({count:0,
+                                    count1:0,
+                                    count2:0,
+                                    count3:0,
+                                    init1:0,
+                                    init2:0,
+                                    init3:0,
+                                    init_all:0,
+                                    sat1:0,
+                                    sat2:0,
+                                    sat3:0});
+                }
             function write_count(cars_count)
                 {
                     cars_ref=firebase.database().ref('/');
