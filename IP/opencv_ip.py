@@ -3,7 +3,7 @@ import numpy as np
 lowerBound=np.array([33,80,40])
 upperBound=np.array([102,255,255])
 
-cam= cv2.VideoCapture(1)
+cam= cv2.VideoCapture(0)
 kernelOpen=np.ones((5,5))
 kernelClose=np.ones((20,20))
 
@@ -35,6 +35,8 @@ while True:
 
     if s > 600: 
         print("lolololol")
+    else:
+        print("xxxxxxx")
     
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
