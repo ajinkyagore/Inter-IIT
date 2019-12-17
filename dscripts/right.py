@@ -1,4 +1,5 @@
 
+
 from __future__ import print_function
 
 from dronekit import connect, VehicleMode, LocationGlobalRelative, LocationGlobal, Command
@@ -30,8 +31,8 @@ print('Connecting to vehicle on: %s' % connection_string)
 vehicle = connect(connection_string, wait_ready=True, baud=57600)
 
 final_height = 2
-final_north = 5
-final_east = 2
+final_north = 50
+final_right = 20
 
 def get_location_metres(original_location, dNorth, dEast):
     """
@@ -133,6 +134,44 @@ def zigzag(aLocation, north, east, height):
     print(" Upload new commands to vehicle")
     cmds.upload()
 
+def move_right(aLocation, front, side, height):
+
+    """
+    Adds a takeoff command and four waypoint commands to the current mission. 
+    The waypoints are positioned to form a square of side length 2*aSize around the specified LocationGlobal (aLocation).
+
+    The function assumes vehicle.commands matches the vehicle mission state 
+    (you must have called download at least once in the session and after clearing the mission)
+    """	
+
+    cmds = vehicle.commands
+
+    print(" Clear any existing commands")
+    cmds.clear() 
+    
+    print(" Define/add new commands.")
+    # Add new commands. The meaning/order of the parameters is documented in the Command class. 
+     
+    #Add MAV_CMD_NAV_TAKEOFF command. This is ignored if the vehicle is already in the air.
+    cmds.add(Command( 0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_TAKEOFF, 0, 0, 0, 0, 0, 0, 0, 0, height))
+
+    #Define the four MAV_CMD_NAV_WAYPOINT locations and add the commands
+    point1 = get_location_metres(aLocation,  front, 0)
+    point2 = get_location_metres(point1, 0, side)
+    point3 = get_location_metres(point2, -front, 0)
+    point4 = get_location_metres(point3, 0, side)
+    point5 = get_location_metres(point4,  front, 0)
+    cmds.add(Command( 0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT, 0, 0, 0, 0, 0, 0, point1.lat, point1.lon, height))
+    cmds.add(Command( 0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT, 0, 0, 0, 0, 0, 0, point2.lat, point2.lon, height))
+    cmds.add(Command( 0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT, 0, 0, 0, 0, 0, 0, point3.lat, point3.lon, height))
+    cmds.add(Command( 0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT, 0, 0, 0, 0, 0, 0, point4.lat, point4.lon, height))
+    cmds.add(Command( 0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT, 0, 0, 0, 0, 0, 0, point5.lat, point5.lon, height))
+    #add dummy waypoint "5" at point 4 (lets us know when have reached destination)
+    cmds.add(Command( 0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT, 0, 0, 0, 0, 0, 0, point5.lat, point5.lon, height))    
+
+    print(" Upload new commands to vehicle")
+    cmds.upload()
+
 
 def arm_and_takeoff(aTargetAltitude):
     """
@@ -169,7 +208,8 @@ def arm_and_takeoff(aTargetAltitude):
 
         
 print('Create a new mission (for current location)')
-zigzag(vehicle.location.global_frame,final_north,final_east,final_height)
+move_right(vehicle.location.global_frame,final_north,final_right,final_height)
+
 
 # From Copter 3.3 you will be able to take off using a mission item. Plane must take off using a mission item (currently).
 arm_and_takeoff(final_height)
@@ -195,7 +235,7 @@ while True:
     # if nextwaypoint==3: #Skip to next waypoint
 #        print('Skipping to Waypoint 5 when reach waypoint 3')
 #        vehicle.commands.next = 5
-    if nextwaypoint==6: #Dummy waypoint - as soon as we reach waypoint 4 this is true and we exit.
+    if nextwaypoint==7: #Dummy waypoint - as soon as we reach waypoint 4 this is true and we exit.
         print("Exit 'standard' mission when start heading to final waypoint (5)")
         break;
     time.sleep(1)
