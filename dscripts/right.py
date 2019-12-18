@@ -233,6 +233,8 @@ while(ground_signal == 0):
     firebase.put('/', "sat2", num_sat)
     time.sleep(1)
 
+#opening a file for writing
+fff = open("gps_left.txt", "w")
 
 # From Copter 3.3 you will be able to take off using a mission item. Plane must take off using a mission item (currently).
 arm_and_takeoff(final_height)
@@ -251,6 +253,14 @@ vehicle.mode = VehicleMode("AUTO")
 #   distance to the next waypoint.
 
 while True:
+
+#    if((time.time() - gps_print_timer) >= 1)
+#        fff.write(str("time: ", time.time(), " ", vehicle.location.global_relative_frame))
+#        gps_print_timer = time.time()
+
+    
+    fff.write(str("time: ", time.time(), " ", vehicle.location.global_relative_frame))
+
     nextwaypoint=vehicle.commands.next
     print('Distance to waypoint (%s): %s' % (nextwaypoint, distance_to_current_waypoint()))
     print('Height:', vehicle.location.global_relative_frame.alt)
