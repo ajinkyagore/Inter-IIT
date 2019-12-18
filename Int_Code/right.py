@@ -284,7 +284,7 @@ while True:
   
     #< Image Processing
     ret, frame = cap.read()
-    cv2.imshow('frame', frame)
+#    cv2.imshow('frame', frame)
     img=cv2.cvtColor(frame,cv2.COLOR_BGR2RGB)
 
     img=cv2.resize(img,(256,256))
