@@ -9,6 +9,7 @@ from pymavlink import mavutil
 from firebase import firebase  
 import urllib3, urllib, http.client
 import json
+from datetime import datetime
 
 
 #Set up option parsing to get connection string
@@ -246,7 +247,9 @@ vehicle.commands.next=0
 # Set mode to AUTO to start mission
 vehicle.mode = VehicleMode("AUTO")
 
-
+start_time = time.time()
+fff.write(str("start_time: ", str(datetime.now()))  
+fff.write("\n")
 # Monitor mission. 
 # Demonstrates getting and setting the command number 
 # Uses distance_to_current_waypoint(), a convenience function for finding the 
@@ -258,7 +261,8 @@ while True:
 #        fff.write(str("time: ", time.time(), " ", vehicle.location.global_relative_frame))
 #        gps_print_timer = time.time()
 
-    gps_string = "time: " + str(time.time()) + " " + str(vehicle.location.global_relative_frame)
+    current_time = time.time() - start_time 
+    gps_string = "time: " + str(current_time) + " " + str(vehicle.location.global_relative_frame) + "\n"
     fff.write(gps_string)
 
     nextwaypoint=vehicle.commands.next
