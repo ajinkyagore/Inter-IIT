@@ -49,80 +49,97 @@
                 background-color: #ccffcc;
                 padding: 10px;
             }    
-            
-            #button {
+             /*#button {
                 position: absolute;
                 top: 10px;
                 left: 2%;
                 z-index: 99;
-                background-color: #fcffcc; 
+                background-color: #cfffcc; 
+                padding: 10px;
+                /*background-color: #4CAF50;  
                 border: none;
                 color: white;
-                border:0.16em solid rgba(255,255,255,0);
-                border-radius:0.5em;
-                box-sizing: border-box;
-                padding: 12px 16px;
+                padding: 15px 32px; 
                 text-align: center;
                 text-decoration: none;
                 display: inline-block;
                 font-size: 16px;
                 margin: 4px 2px;
-                -webkit-transition-duration: 0.4s; /* Safari */
-                transition-duration: 0.4s;
+                cursor: pointer;
+            }  */
+            #button {
+                position: absolute;
+                top: 10px;
+                left: 2%;
+    z-index: 99;
+    background-color: #fcffcc; 
+    border: none;
+    color: white;
+    border:0.16em solid rgba(255,255,255,0);
+    border-radius:0.5em;
+    box-sizing: border-box;
+    padding: 12px 16px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    -webkit-transition-duration: 0.4s; /* Safari */
+    transition-duration: 0.4s;
                 cursor: pointer;
             }
-            .button1 {  
-                border-radius: 5px;
-                background-color: white; 
-                color: black; 
-                border: 2px solid #4CAF50;
-                padding: 4px 8px;
-            }
-            .button1:hover {
-                background-color: #4CAF50;
-                color: white;
-            }
-            .button2 {
-                border-radius: 5px;
-                background-color: white; 
-                color: black; 
-                border: 2px solid #008CBA;
-                padding: 4px 8px;
-            }
-            .button2:hover {
-                background-color: #008CBA;
-                color: white;
-            }
-            .button3 {
-                border-radius: 5px;
-                background-color: white; 
-                color: black; 
-                border: 2px solid #f44336;
-                padding: 4px 8px;
-            }
-            .button3:hover {
-                background-color: #f44336;
-                color: white;
-            }
-            .button4 {
-                border-radius: 5px;
-                background-color: white;
-                color: black;
-                border: 2px solid #77e7e7;
-                padding: 4px 8px;
-            }
-            .button4:hover {background-color: #77e7e7;}
-            .button5 {
-                border-radius: 5px;
-                background-color: white;
-                color: black;
-                border: 2px solid #555555;
-                padding: 4px 8px;
-            }
-            .button5:hover {
-                background-color: #555555;
-                color: white;
-            }
+.button1 {  
+    border-radius: 5px;
+  background-color: white; 
+  color: black; 
+  border: 2px solid #4CAF50;
+  padding: 4px 8px;
+}
+.button1:hover {
+  background-color: #4CAF50;
+  color: white;
+}
+.button2 {
+        border-radius: 5px;
+  background-color: white; 
+  color: black; 
+  border: 2px solid #008CBA;
+  padding: 4px 8px;
+}
+.button2:hover {
+  background-color: #008CBA;
+  color: white;
+}
+.button3 {
+    border-radius: 5px;
+  background-color: white; 
+  color: black; 
+  border: 2px solid #f44336;
+  padding: 4px 8px;
+}
+.button3:hover {
+  background-color: #f44336;
+  color: white;
+}
+.button4 {
+    border-radius: 5px;
+  background-color: white;
+  color: black;
+  border: 2px solid #77e7e7;
+  padding: 4px 8px;
+}
+.button4:hover {background-color: #77e7e7;}
+.button5 {
+    border-radius: 5px;
+  background-color: white;
+  color: black;
+  border: 2px solid #555555;
+  padding: 4px 8px;
+}
+.button5:hover {
+  background-color: #555555;
+  color: white;
+}
         </style>
 
     </head>
@@ -171,20 +188,20 @@
         
 
         <script>
-            // Our web app's Firebase configuration
-            var firebaseConfig = {
-            apiKey: "AIzaSyBx3Ar912F8gq8qLjcNA9JXczU_rxfU_ME",
-            authDomain: "inter-iit-drdo-sase-2019.firebaseapp.com",
-            databaseURL: "https://inter-iit-drdo-sase-2019.firebaseio.com",
-            projectId: "inter-iit-drdo-sase-2019",
-            storageBucket: "inter-iit-drdo-sase-2019.appspot.com",
-            messagingSenderId: "68246356146",
-            appId: "1:68246356146:web:e6ad95d5292200e567c9ab",
-            measurementId: "G-QWF6DHZBQR"
-            };
-            // Initialize Firebase
-            firebase.initializeApp(firebaseConfig);
-            firebase.analytics();
+            // Your web app's Firebase configuration
+    var firebaseConfig = {
+    apiKey: "AIzaSyBx3Ar912F8gq8qLjcNA9JXczU_rxfU_ME",
+    authDomain: "inter-iit-drdo-sase-2019.firebaseapp.com",
+    databaseURL: "https://inter-iit-drdo-sase-2019.firebaseio.com",
+    projectId: "inter-iit-drdo-sase-2019",
+    storageBucket: "inter-iit-drdo-sase-2019.appspot.com",
+    messagingSenderId: "68246356146",
+    appId: "1:68246356146:web:e6ad95d5292200e567c9ab",
+    measurementId: "G-QWF6DHZBQR"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  firebase.analytics();
         </script>
 
         <script>
@@ -226,21 +243,6 @@
                     cars_ref=firebase.database().ref('/');
                     cars_ref.update({count: cars_count});
                 }
-//              function sat_1(sat1_count)
-//                 {
-//                     sat1=firebase.database().ref('/');
-//                     sat1.update({count: sat1_count});
-//                 }
-//              function sat_2(sat2_count)
-//                 {
-//                     sat2=firebase.database().ref('/');
-//                     sat2.update({count: sat2_count});
-//                 }
-//              function sat_3(sat3_count)
-//                 {
-//                     sat3=firebase.database().ref('/');
-//                     sat3.update({count: sat3_count});
-//                 }
             function reset_all()
                 {
                     cars_ref=firebase.database().ref('/');
@@ -255,9 +257,9 @@
                                   sat1:0,
                                   sat2:0,
                                   sat3:0,
-                                  trigger1:0,
-                                  trigger2:0,
-                                  trigger3:0});
+				  trigger1:0,
+				  trigger2:0,
+				  trigger3:0});
                 }
             // This Function will create a car icon with angle and add/display that marker on the map icon should be of the drones (boxes)
             function AddCar(data) {
@@ -277,30 +279,21 @@
                     //icon:icon,
                     map: map
                 });
-
                 markers[data.key] = marker; // add marker in the markers array...
                 write_count(cars_count);
                 document.getElementById("cars").innerHTML = cars_count;
                 console.log('drone added!!');
                 console.log(data.val().lat);
             }
-            var sat1_count = 0;
-
-            var sat2_count = 0;
-
-            var sat3_count = 0;
-            
-            sat_1(sat1_count)    
-            document.getElementById("sat_1").innerHTML = sat1_count;
-            console.log('hey!!!');
-            sat_2(sat2_count)
-            document.getElementById("sat_2").innerHTML = sat2_count;
-            console.log('hey!!!!!!');
-            sat_3(sat3_count)
-            document.getElementById("sat_3").innerHTML = sat3_count;
-            console.log('hey!!!!!!!!!');
-            
-
+	    cars_ref=firebase.database().ref('/');
+            cars_ref.on('value',function (data){
+            document.getElementById("sat_1").innerHTML = data.val().sat1;
+            console.log(data.val().sat1)	
+            document.getElementById("sat_2").innerHTML = data.val().sat2;
+            document.getElementById("sat_3").innerHTML = data.val().sat3;
+	    console.log('hey!!!');
+            });
+      
             // get firebase database reference...
             var cars_Ref1 = firebase.database().ref('/drone1');
             console.log('drone referenced to database!!');
