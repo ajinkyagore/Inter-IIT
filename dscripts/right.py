@@ -269,7 +269,7 @@ print_timer = time.time()
 
 while True:
 
-    if((time.time() - gps_print_timer) >= 1))
+    if((time.time() - gps_print_timer) >= 1)
         current_time = time.time() - start_time 
         gps_string = "time: " + str(current_time) + " " + str(vehicle.location.global_relative_frame) + "\n"
         fff.write(gps_string)
