@@ -12,6 +12,11 @@ import urllib3, urllib, http.client
 import json
 from datetime import datetime
 
+import cv2
+import numpy as np
+import keras
+model = keras.models.load_model("interiit_model_3.model")
+
 #Set up option parsing to get connection string
 import argparse  
 parser = argparse.ArgumentParser(description='Demonstrates basic mission operations.')
@@ -22,6 +27,9 @@ args = parser.parse_args()
 connection_string = args.connect
 sitl = None
 
+#Initialising the camera
+cap = cv2.VideoCapture(0)
+print("Started Camera")
 
 #Start SITL if no connection string specified
 if not connection_string:
@@ -248,46 +256,64 @@ vehicle.commands.next=0
 # Set mode to AUTO to start mission
 vehicle.mode = VehicleMode("AUTO")
 
-#gps_print_timer = time.time()
-
 start_time = time.time()
 fff.write(str("start_time: ", str(datetime.now()))  
 fff.write("\n")
-# Monitor mission. 
-# Demonstrates getting and setting the command number 
-# Uses distance_to_current_waypoint(), a convenience function for finding the 
-#   distance to the next waypoint.
+print_timer = time.time()
+gps_print_timer = time.time()
 
 while True:
-    
-#    if((time.time() - gps_print_timer) >= 1)
-#        fff.write(str("time: ", time.time(), " ", vehicle.location.global_relative_frame))
-#        gps_print_timer = time.time()
 
-    
-    current_time = time.time() - start_time 
-    gps_string = "time: " + str(current_time) + " " + str(vehicle.location.global_relative_frame) + "\n"
-    fff.write(gps_string)
+    if((time.time() - gps_print_timer) >= 1)
+        current_time = time.time() - start_time 
+        gps_string = "time: " + str(current_time) + " " + str(vehicle.location.global_relative_frame) + "\n"
+        fff.write(gps_string)
+        gps_print_timer = time.time()
 
     nextwaypoint=vehicle.commands.next
-    print('Distance to waypoint (%s): %s' % (nextwaypoint, distance_to_current_waypoint()))
-    print('Height:', vehicle.location.global_relative_frame.alt)
-  
-    # if nextwaypoint==3: #Skip to next waypoint
-#        print('Skipping to Waypoint 5 when reach waypoint 3')
-#        vehicle.commands.next = 5
 
-    # firebase update
-    if obj_detected:  
+    if((time.time() - print_timer) > 1):
+        print('Distance to waypoint (%s): %s' % (nextwaypoint, distance_to_current_waypoint()))
+        print('Height:', vehicle.location.global_relative_frame.alt)
+        print_timer = time.time()
+  
+    #< Image Processing
+    ret, frame = cap.read()
+    cv2.imshow('frame', frame)
+    img=cv2.cvtColor(frame,cv2.COLOR_BGR2RGB)
+
+    img=cv2.resize(img,(256,256))
+    img=(img.astype(np.float32)/255)
+    img=np.expand_dims(img, axis=0)
+    predictions=model.predict(img,verbose=0)
+
+    y_pred_binary = (predictions > 0.5).astype(np.int)
+
+    if y_pred_binary:
+        print("****************************************")
+        print("----------------------------------------")
+        print("          Object Detected")
+        print("----------------------------------------")
+        print("****************************************")
+        print("****************************************")
+        print("----------------------------------------")
+        print("At GPS location: ", vehicle.location.global_relative_frame)
+        print("----------------------------------------")
+        print("****************************************")
+
+        # firebase update
         count1=count1+1
         update_firebase(count1)
+    # />
 
-    if nextwaypoint==7: #Dummy waypoint - as soon as we reach waypoint 4 this is true and we exit.
+    if cv2.waitKey(1) & 0xFF == ord('q'):
+        break
+
+    if nextwaypoint==6 : #Dummy waypoint - as soon as we reach waypoint 4 this is true and we exit.
         print("Exit 'standard' mission when start heading to final waypoint (5)")
         break;
-    time.sleep(1)
 
-print('100-200 jyada lele par LAND kara de')
+print("changed to LAND Mode")
 vehicle.mode = VehicleMode("LAND")
 
 
@@ -299,3 +325,6 @@ vehicle.close()
 if sitl is not None:
     sitl.stop()
 
+# Close camera
+cap.release()
+cv2.destroyAllWindows()
