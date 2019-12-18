@@ -204,23 +204,7 @@
 
         <script src="https://www.gstatic.com/firebasejs/7.5.0/firebase-analytics.js"></script>
 
-        <!--script>
-          // Your web app's Firebase configuration
-          var firebaseConfig = {
-            apiKey: "AIzaSyDu78WpQZLGu0h8N45mmdxakcQG9IaLM9w",
-            authDomain: "drone-b3b9a.firebaseapp.com",
-            databaseURL: "https://drone-b3b9a.firebaseio.com",
-            projectId: "drone-b3b9a",
-            storageBucket: "drone-b3b9a.appspot.com",
-            messagingSenderId: "814064440192",
-            appId: "1:814064440192:web:cee3ad898f0ea738726765",
-            measurementId: "G-8BEJ55TH8D"
-          };
-          // Initialize Firebase
-          firebase.initializeApp(firebaseConfig);
-          console.log('firebase initialised');
-          firebase.analytics();
-        </script-->
+        
 
         <script>
             // Your web app's Firebase configuration
@@ -318,6 +302,14 @@
                 console.log('drone added!!');
                 console.log(data.val().lat);
             }
+            var sat1 = firebase.database().ref('/sat1');
+            document.getElementById("sat_1").innerHTML = sat1;
+            //
+            var sat2 = firebase.database().ref('/sat2');
+            document.getElementById("sat_2").innerHTML = sat2;
+            //
+            var sat3 = firebase.database().ref('/sat3');
+            document.getElementById("sat_3").innerHTML = sat3;
             // get firebase database reference...
             var cars_Ref1 = firebase.database().ref('/drone1');
             console.log('drone referenced to database!!');
