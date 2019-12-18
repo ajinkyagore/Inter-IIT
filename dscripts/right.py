@@ -242,7 +242,7 @@ while(ground_signal == 0):
     time.sleep(1)
 
 #opening a file for writing
-fff = open("gps_left.txt", "w")
+fff = open("gps_right.txt", "w")
 
 # From Copter 3.3 you will be able to take off using a mission item. Plane must take off using a mission item (currently).
 arm_and_takeoff(final_height)
@@ -254,16 +254,18 @@ vehicle.commands.next=0
 # Set mode to AUTO to start mission
 vehicle.mode = VehicleMode("AUTO")
 
+gps_print_timer = time.time()
+
+start_time = time.time()
+first_line = "start_time: " + str(datetime.now()) + "\n"
+fff.write(first_line)  
+print_timer = time.time()
+
 # Monitor mission. 
 # Demonstrates getting and setting the command number 
 # Uses distance_to_current_waypoint(), a convenience function for finding the 
 #   distance to the next waypoint.
 
-start_time = time.time()
-fff.write(str("start_time: ", str(datetime.now()))  
-fff.write("\n")
-print_timer = time.time()
-gps_print_timer = time.time()
 
 while True:
 

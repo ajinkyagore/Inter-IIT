@@ -256,11 +256,18 @@ vehicle.commands.next=0
 # Set mode to AUTO to start mission
 vehicle.mode = VehicleMode("AUTO")
 
-start_time = time.time()
-fff.write(str("start_time: ", str(datetime.now()))  
-fff.write("\n")
-print_timer = time.time()
 gps_print_timer = time.time()
+
+start_time = time.time()
+first_line = "start_time: " + str(datetime.now()) + "\n"
+fff.write(first_line)  
+print_timer = time.time()
+
+
+# Monitor mission. 
+# Demonstrates getting and setting the command number 
+# Uses distance_to_current_waypoint(), a convenience function for finding the 
+#   distance to the next waypoint.
 
 while True:
 
@@ -309,7 +316,7 @@ while True:
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
 
-    if nextwaypoint==6 : #Dummy waypoint - as soon as we reach waypoint 4 this is true and we exit.
+    if nextwaypoint==7 : #Dummy waypoint - as soon as we reach waypoint 4 this is true and we exit.
         print("Exit 'standard' mission when start heading to final waypoint (5)")
         break;
 
