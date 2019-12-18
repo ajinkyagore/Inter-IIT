@@ -4,23 +4,16 @@
     <head>
     	<script type = "text/JavaScript">
          <!--
-            function AutoRefresh( t ) {
-               setTimeout("location.reload(true);", t);
-            }
+           // function AutoRefresh( t ) {
+           //    setTimeout("location.reload(true);", t);
+           // }
          //-->
-      </script>
+        </script>
         <style>
 
             #map {
                 height: 100%;
             }
-
-            .button1 {
-            background-color: white; 
-            color: black; 
-            border: 2px solid #4CAF50;
-            }
-
 
             html, body {
                 height: 100%;
@@ -30,28 +23,174 @@
             #over_map {
                 position: absolute;
                 top: 10px;
-                left: 89%;
+                left: 87%;
                 z-index: 99;
                 background-color: #ccffcc;
                 padding: 10px;
             }
+
+            #sat1 {
+                position: absolute;
+                top: 50px;
+                left: 87%;
+                z-index: 99;
+                background-color: #ccffcc;
+                padding: 10px;
+            }
+            #sat2 {
+                position: absolute;
+                top: 90px;
+                left: 87%;
+                z-index: 99;
+                background-color: #ccffcc;
+                padding: 10px;
+            }
+            #sat3 {
+                position: absolute;
+                top: 130px;
+                left: 87%;
+                z-index: 99;
+                background-color: #ccffcc;
+                padding: 10px;
+            }    
+             /*#button {
+                position: absolute;
+                top: 10px;
+                left: 2%;
+                z-index: 99;
+                background-color: #cfffcc; 
+                padding: 10px;
+                /*background-color: #4CAF50;  
+                border: none;
+                color: white;
+                padding: 15px 32px; 
+                text-align: center;
+                text-decoration: none;
+                display: inline-block;
+                font-size: 16px;
+                margin: 4px 2px;
+                cursor: pointer;
+            }  */
+
+            #button {
+                position: absolute;
+                top: 10px;
+                left: 2%;
+    z-index: 99;
+    background-color: #fcffcc; 
+    border: none;
+    color: white;
+    border:0.16em solid rgba(255,255,255,0);
+    border-radius:0.5em;
+    box-sizing: border-box;
+    padding: 12px 16px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    -webkit-transition-duration: 0.4s; /* Safari */
+    transition-duration: 0.4s;
+                cursor: pointer;
+            }
+
+.button1 {  
+    border-radius: 5px;
+  background-color: white; 
+  color: black; 
+  border: 2px solid #4CAF50;
+  padding: 4px 8px;
+}
+
+.button1:hover {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.button2 {
+        border-radius: 5px;
+
+  background-color: white; 
+  color: black; 
+  border: 2px solid #008CBA;
+  padding: 4px 8px;
+}
+
+.button2:hover {
+  background-color: #008CBA;
+  color: white;
+}
+
+.button3 {
+    border-radius: 5px;
+
+  background-color: white; 
+  color: black; 
+  border: 2px solid #f44336;
+  padding: 4px 8px;
+}
+
+.button3:hover {
+  background-color: #f44336;
+  color: white;
+}
+
+.button4 {
+    border-radius: 5px;
+
+  background-color: white;
+  color: black;
+  border: 2px solid #77e7e7;
+  padding: 4px 8px;
+}
+
+.button4:hover {background-color: #77e7e7;}
+
+.button5 {
+    border-radius: 5px;
+
+  background-color: white;
+  color: black;
+  border: 2px solid #555555;
+  padding: 4px 8px;
+}
+
+.button5:hover {
+  background-color: #555555;
+  color: white;
+}
         </style>
+
     </head>
 
     <body>
       
         <div id="map"></div>
-
-        <div id="over_map">
-            <div id = "button">
-                <button name = 'button1' value = "OK" type = "button" onclick="write_btn1()"> BTN 1 </button>
-                <button name = 'button2' value = "OK" type = "button" onclick="write_btn2()"> BTN 2 </button>
-                <button name = 'button3' value = "OK" type = "button" onclick="write_btn3()"> BTN 3 </button>
-                <button name = 'button4' value = "OK" type = "button" onclick="write_btn_all()"> BTN ALL </button>
-                <button name = 'button5' value = "OK" type = "button" onclick="reset_all()"> RESET </button>
+        <div id = "button">
+                <button class='button1' name = 'button1' value = "OK" type = "button" style='margin-right:10px' onclick="write_btn1()"> BTN 1 </button>
+                <button class="button2" name = 'button2' value = "OK" type = "button" style='margin-right:10px' onclick="write_btn2()"> BTN 2 </button>
+                <button class="button3" name = 'button3' value = "OK" type = "button" style='margin-right:10px' onclick="write_btn3()"> BTN 3 </button>
+                <button class="button4" name = 'button4' value = "OK" type = "button" style='margin-right:10px' onclick="write_btn_all()"> _BTN_</button>
+                <button class="button5" name = 'button5' value = "OK" type = "button" onclick="reset_all()"> RESET </button>
             </div>
+        <div id="over_map">  
             <div>
-                <span>Object detected: </span><span id="cars">0</span>
+                <span>Objects detected: </span><span id="cars">0</span>
+            </div>
+        </div>
+        <div id="sat1">  
+            <div>
+                <span>Drone1 satellites: </span><span id="sat_1">0</span>
+            </div>
+        </div>
+        <div id="sat2">  
+            <div>
+                <span>Drone2 sateliites: </span><span id="sat_2">0</span>
+            </div>
+        </div>
+        <div id="sat3">  
+            <div>
+                <span>Drone3 satellites: </span><span id="sat_3">0</span>
             </div>
         </div>
 
@@ -135,25 +274,25 @@
                     cars_ref=firebase.database().ref('/');
                     cars_ref.update({init_all: 1});
                 }            
-            function reset_all()
-                {
-                    cars_ref=firebase.database().ref('/');
-                    cars_ref.set({count:0,
-                                    count1:0,
-                                    count2:0,
-                                    count3:0,
-                                    init1:0,
-                                    init2:0,
-                                    init3:0,
-                                    init_all:0,
-                                    sat1:0,
-                                    sat2:0,
-                                    sat3:0});
-                }
             function write_count(cars_count)
                 {
                     cars_ref=firebase.database().ref('/');
                     cars_ref.update({count: cars_count});
+                }
+            function reset_all()
+                {
+                    cars_ref=firebase.database().ref('/');
+                    cars_ref.set({count:0,
+                                  count1:0,
+                                  count2:0,
+                                  count3:0,
+                                  init1:0,
+                                  init2:0,
+                                  init3:0,
+                                  init_all:0,
+                                  sat1:0,
+                                  sat2:0,
+                                  sat3:0});
                 }
             // This Function will create a car icon with angle and add/display that marker on the map icon should be of the drones (boxes)
             function AddCar(data) {
