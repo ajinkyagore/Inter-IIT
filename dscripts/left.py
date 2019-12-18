@@ -260,7 +260,10 @@ while True:
 #        gps_print_timer = time.time()
 
     
-    fff.write(str("time: ", str(time.time()), " ", str(vehicle.location.global_relative_frame)))
+    gps_string = str("time: ", str(time.time()), " ")
+    gps_string += str(vehicle.location.global_relative_frame)
+    fff.write(gps_string)
+
     nextwaypoint=vehicle.commands.next
     print('Distance to waypoint (%s): %s' % (nextwaypoint, distance_to_current_waypoint()))
     print('Height:', vehicle.location.global_relative_frame.alt)
