@@ -251,8 +251,9 @@ vehicle.mode = VehicleMode("AUTO")
 #gps_print_timer = time.time()
 
 start_time = time.time()
-fff.write(str("start_time: ", str(datetime.now()))  
-fff.write("\n")
+first_line = "start_time: " + str(datetime.now()) + "\n"
+fff.write(first_line)  
+
 # Monitor mission. 
 # Demonstrates getting and setting the command number 
 # Uses distance_to_current_waypoint(), a convenience function for finding the 
