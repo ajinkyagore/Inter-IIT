@@ -258,8 +258,7 @@ while True:
 #        fff.write(str("time: ", time.time(), " ", vehicle.location.global_relative_frame))
 #        gps_print_timer = time.time()
 
-    gps_string = str("time: ", str(time.time()), " ")
-    gps_string += str(vehicle.location.global_relative_frame)
+    gps_string = "time: " + str(time.time()) + " " + str(vehicle.location.global_relative_frame)
     fff.write(gps_string)
 
     nextwaypoint=vehicle.commands.next
