@@ -14,7 +14,7 @@ from datetime import datetime
 import cv2
 import numpy as np
 import keras
-model = keras.models.load_model("../Int_code/interiit_model_3.model")
+model = keras.models.load_model("interiit_model_3.model")
 
 #Set up option parsing to get connection string
 import argparse  
@@ -45,47 +45,12 @@ print('Connecting to vehicle on: %s' % connection_string)
 vehicle = connect(connection_string, wait_ready=True, baud=57600)
 
 final_height = 2
-final_north = 50
-final_left = 20
-vehicle.parameters['WPNAV_SPEED'] = 50    
+final_north = 40
+final_left = 2.5
+vehicle.parameters['WPNAV_SPEED'] = 100    
 
-def calculate_initial_compass_bearing(pointA, pointB):
-    """
-    Calculates the bearing between two points.
-    The formulae used is the following:
-        θ = atan2(sin(Δlong).cos(lat2),
-                  cos(lat1).sin(lat2) − sin(lat1).cos(lat2).cos(Δlong))
-    :Parameters:
-      - `pointA: The tuple representing the latitude/longitude for the
-        first point. Latitude and longitude must be in decimal degrees
-      - `pointB: The tuple representing the latitude/longitude for the
-        second point. Latitude and longitude must be in decimal degrees
-    :Returns:
-      The bearing in degrees
-    :Returns Type:
-      float
-    """
-    if (type(pointA) != tuple) or (type(pointB) != tuple):
-        raise TypeError("Only tuples are supported as arguments")
-
-    lat1 = math.radians(pointA[0])
-    lat2 = math.radians(pointB[0])
-
-    diffLong = math.radians(pointB[1] - pointA[1])
-
-    x = math.sin(diffLong) * math.cos(lat2)
-    y = math.cos(lat1) * math.sin(lat2) - (math.sin(lat1)
-            * math.cos(lat2) * math.cos(diffLong))
-
-    initial_bearing = math.atan2(x, y)
-
-    # Now we have the initial bearing but math.atan2 return values
-    # from -180° to + 180° which is not what we want for a compass bearing
-    # The solution is to normalize the initial bearing as shown below
-    initial_bearing = math.degrees(initial_bearing)
-    compass_bearing = (initial_bearing + 360) % 360
-
-    return compass_bearing
+xx = [0, 29.867521, 29.867889, 29.867881, 29.867526]
+yy = [0, 77.899015, 77.899059, 77.899473, 77.899419]
 
 def get_location_metres(original_location, dNorth, dEast):
     """
@@ -187,7 +152,7 @@ def zigzag(aLocation, north, east, height):
     print(" Upload new commands to vehicle")
     cmds.upload()
 
-def move_left(aLocation, front, side, height):
+def move_left(aLocation, x, y, height):
 
     """
     Adds a takeoff command and four waypoint commands to the current mission. 
@@ -212,32 +177,20 @@ def move_left(aLocation, front, side, height):
     point1 = LocationGlobal(29.867521, 77.899015, height)
     point2 = LocationGlobal(29.867889, 77.899059, height)
 
-    bearing = calculate_initial_compass_bearing((29.867521,77.899015),(29.867889,77.899059))
-
-    point3 = get_location_metres(point2, side*math.sin(bearing), side*math.cos(bearing))
-    point4 = get_location_metres(point1, side*math.sin(bearing), side*math.cos(bearing))
-    point5 = get_location_metres(point4, side*math.sin(bearing), side*math.cos(bearing))
-    point6 = get_location_metres(point3, side*math.sin(bearing), side*math.cos(bearing))
-    point7 = get_location_metres(point6, side*math.sin(bearing), side*math.cos(bearing))
-    point8 = get_location_metres(point5, side*math.sin(bearing), side*math.cos(bearing))
-    point9 = get_location_metres(point8, side*math.sin(bearing), side*math.cos(bearing))
-    point10 = get_location_metres(point7, side*math.sin(bearing), side*math.cos(bearing))
-    point11 = get_location_metres(point10, side*math.sin(bearing), side*math.cos(bearing))
-    point12 = get_location_metres(point9, side*math.sin(bearing), side*math.cos(bearing))
-    cmds.add(Command( 0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT, 0, 0, 0, 0, 0, 0, point1.lat, point1.lon, height))
-    cmds.add(Command( 0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT, 0, 0, 0, 0, 0, 0, point2.lat, point2.lon, height))
-    cmds.add(Command( 0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT, 0, 0, 0, 0, 0, 0, point3.lat, point3.lon, height))
-    cmds.add(Command( 0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT, 0, 0, 0, 0, 0, 0, point4.lat, point4.lon, height))
-    cmds.add(Command( 0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT, 0, 0, 0, 0, 0, 0, point5.lat, point5.lon, height))
-    cmds.add(Command( 0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT, 0, 0, 0, 0, 0, 0, point6.lat, point6.lon, height))
-    cmds.add(Command( 0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT, 0, 0, 0, 0, 0, 0, point7.lat, point7.lon, height))
-    cmds.add(Command( 0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT, 0, 0, 0, 0, 0, 0, point8.lat, point8.lon, height))
-    cmds.add(Command( 0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT, 0, 0, 0, 0, 0, 0, point9.lat, point9.lon, height))
-    cmds.add(Command( 0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT, 0, 0, 0, 0, 0, 0, point10.lat, point10.lon, height))
-    cmds.add(Command( 0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT, 0, 0, 0, 0, 0, 0, point11.lat, point11.lon, height))
-    cmds.add(Command( 0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT, 0, 0, 0, 0, 0, 0, point12.lat, point12.lon, height))
-    #add dummy waypoint "5" at point 4 (lets us know when have reached destination)
-    cmds.add(Command( 0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT, 0, 0, 0, 0, 0, 0, point12.lat, point12.lon, height))
+    cmds.add(Command( 0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT, 0, 0, 0, 0, 0, 0, xx[1], yy[1], height))
+    cmds.add(Command( 0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT, 0, 0, 0, 0, 0, 0, xx[2], yy[2], height))
+    cmds.add(Command( 0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT, 0, 0, 0, 0, 0, 0, xx[2] + (xx[3] - xx[2])/5, yy[2] + (yy[3] - yy[2])/5, height))
+    cmds.add(Command( 0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT, 0, 0, 0, 0, 0, 0, xx[1] + (xx[4] - xx[1])/5, yy[1] + (yy[4] - yy[1])/5, height))
+    cmds.add(Command( 0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT, 0, 0, 0, 0, 0, 0, xx[1] + 2*(xx[4] - xx[1])/5, yy[1] + 2*(yy[4] - yy[1])/5, height))
+    cmds.add(Command( 0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT, 0, 0, 0, 0, 0, 0, xx[2] + 2*(xx[3] - xx[2])/5, yy[2] + 2*(yy[3] - yy[2])/5, height))
+    cmds.add(Command( 0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT, 0, 0, 0, 0, 0, 0, xx[2] + 3*(xx[3] - xx[2])/5, yy[2] + 3*(yy[3] - yy[2])/5, height))
+    cmds.add(Command( 0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT, 0, 0, 0, 0, 0, 0, xx[1] + 3*(xx[4] - xx[1])/5, yy[1] + 3*(yy[4] - yy[1])/5, height))
+    cmds.add(Command( 0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT, 0, 0, 0, 0, 0, 0, xx[1] + 4*(xx[4] - xx[1])/5, yy[1] + 4*(yy[4] - yy[1])/5, height))
+    cmds.add(Command( 0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT, 0, 0, 0, 0, 0, 0, xx[2] + 4*(xx[3] - xx[2])/5, yy[2] + 4*(yy[3] - yy[2])/5, height))
+    cmds.add(Command( 0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT, 0, 0, 0, 0, 0, 0, xx[2] + 5*(xx[3] - xx[2])/5, yy[2] + 5*(yy[3] - yy[2])/5, height))
+    cmds.add(Command( 0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT, 0, 0, 0, 0, 0, 0, xx[1] + 5*(xx[4] - xx[1])/5, yy[1] + 5*(yy[4] - yy[1])/5, height))
+    #add dummyy waypoint "5" at point 4 (lets us know when have reached destination)
+    cmds.add(Command( 0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT, 0, 0, 0, 0, 0, 0, xx[1] + 5*(xx[4] - xx[1])/5, yy[1] + 5*(yy[4] - yy[1])/5, height))
 
     print(" Upload new commands to vehicle")
     cmds.upload()
