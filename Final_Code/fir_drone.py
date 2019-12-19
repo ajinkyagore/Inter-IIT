@@ -45,12 +45,10 @@ print('Connecting to vehicle on: %s' % connection_string)
 vehicle = connect(connection_string, wait_ready=True, baud=57600)
 
 final_height = 2
-final_north = 40
-final_left = 2.5
 vehicle.parameters['WPNAV_SPEED'] = 100    
 
-xx = [0, 29.867521, 29.867889, 29.867881, 29.867526]
-yy = [0, 77.899015, 77.899059, 77.899473, 77.899419]
+xx = [0, 29.867521, 29.867889, 29.867886, 29.867522] 
+yy = [0, 77.899015, 77.899059, 77.899197,77.899149]
 
 def get_location_metres(original_location, dNorth, dEast):
     """
@@ -114,45 +112,8 @@ def download_mission():
     cmds.download()
     cmds.wait_ready() # wait until download is complete.
 
-def zigzag(aLocation, north, east, height):
 
-    """
-    Adds a takeoff command and four waypoint commands to the current mission. 
-    The waypoints are positioned to form a square of side length 2*aSize around the specified LocationGlobal (aLocation).
-
-    The function assumes vehicle.commands matches the vehicle mission state 
-    (you must have called download at least once in the session and after clearing the mission)
-    """	
-
-    cmds = vehicle.commands
-
-    print(" Clear any existing commands")
-    cmds.clear() 
-    
-    print(" Define/add new commands.")
-    # Add new commands. The meaning/order of the parameters is documented in the Command class. 
-     
-    #Add MAV_CMD_NAV_TAKEOFF command. This is ignored if the vehicle is already in the air.
-    cmds.add(Command( 0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_TAKEOFF, 0, 0, 0, 0, 0, 0, 0, 0, height))
-
-    #Define the four MAV_CMD_NAV_WAYPOINT locations and add the commands
-    point1 = get_location_metres(aLocation,  north, 0)
-    point2 = get_location_metres(point1, 0, east)
-    point3 = get_location_metres(point2, -north, 0)
-    point4 = get_location_metres(point3, 0, east)
-    point5 = get_location_metres(point4,  north, 0)
-    cmds.add(Command( 0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT, 0, 0, 0, 0, 0, 0, point1.lat, point1.lon, height))
-    cmds.add(Command( 0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT, 0, 0, 0, 0, 0, 0, point2.lat, point2.lon, height))
-    cmds.add(Command( 0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT, 0, 0, 0, 0, 0, 0, point3.lat, point3.lon, height))
-    cmds.add(Command( 0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT, 0, 0, 0, 0, 0, 0, point4.lat, point4.lon, height))
-    cmds.add(Command( 0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT, 0, 0, 0, 0, 0, 0, point5.lat, point5.lon, height))
-    #add dummy waypoint "5" at point 4 (lets us know when have reached destination)
-    cmds.add(Command( 0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT, 0, 0, 0, 0, 0, 0, point5.lat, point5.lon, height))    
-
-    print(" Upload new commands to vehicle")
-    cmds.upload()
-
-def move_left(aLocation, x, y, height):
+def move_left(height):
 
     """
     Adds a takeoff command and four waypoint commands to the current mission. 
@@ -237,8 +198,8 @@ def update_firebase(count):
 
         
 print('Create a new mission (for current location)')
-move_left(vehicle.location.global_frame,final_north,final_left,final_height)
-
+move_left(final_height)
+ 
 ground_signal = 0
 
 while(ground_signal == 0):
@@ -249,7 +210,7 @@ while(ground_signal == 0):
     time.sleep(1)
 
 #opening a file for writing
-fff = open("gps_left.txt", "w")
+fff = open("gps_fir.txt", "w")
 
 # From Copter 3.3 you will be able to take off using a mission item. Plane must take off using a mission item (currently).
 arm_and_takeoff(final_height)
@@ -273,6 +234,8 @@ print_timer = time.time()
 # Demonstrates getting and setting the command number 
 # Uses distance_to_current_waypoint(), a convenience function for finding the 
 #   distance to the next waypoint.
+
+prev_detection = 0
 
 while True:
 
@@ -301,7 +264,8 @@ while True:
 
     y_pred_binary = (predictions > 0.5).astype(np.int)
 
-    if y_pred_binary:
+    if (y_pred_binary==1 and prev_detection==0):
+        prev_detection = 1
         print("****************************************")
         print("----------------------------------------")
         print("          Object Detected")
@@ -316,6 +280,10 @@ while True:
         # firebase update
         count1=count1+1
         update_firebase(count1)
+    elif (y_pred_binary==1 and prev_detection==1):
+        prev_detection = 1
+    else:
+        prev_detection = 0
     # />
 
     if cv2.waitKey(1) & 0xFF == ord('q'):
