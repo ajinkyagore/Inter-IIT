@@ -236,7 +236,10 @@
             function write_btn_all()
                 {
                     cars_ref=firebase.database().ref('/');
-                    cars_ref.update({init_all: 1});
+                    cars_ref.update({init_all: 1,
+				     init1:1,
+				     init2:1,
+				     init3:1});
                 }            
             function write_count(cars_count)
                 {
