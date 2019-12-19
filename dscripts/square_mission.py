@@ -38,6 +38,7 @@ print('Connecting to vehicle on: %s' % connection_string)
 vehicle = connect(connection_string, wait_ready=True, baud=57600)
 
 
+vehicle.parameters["WPNAV_SPEED"] = 200
 def get_location_metres(original_location, dNorth, dEast):
     """
     Returns a LocationGlobal object containing the latitude/longitude `dNorth` and `dEast` metres from the 
@@ -122,17 +123,26 @@ def adds_square_mission(aLocation, aSize, height):
     #Add MAV_CMD_NAV_TAKEOFF command. This is ignored if the vehicle is already in the air.
     cmds.add(Command( 0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_TAKEOFF, 0, 0, 0, 0, 0, 0, 0, 0, height))
 
+
+    x1 = 29.867521
+    x2 = 29.867889
+    x3 = 29.867881
+    x4 = 29.867526
+    y1 = 77.899015
+    y2 = 77.899059
+    y3 = 77.899473
+    y4 = 77.899419
     #Define the four MAV_CMD_NAV_WAYPOINT locations and add the commands
     point1 = get_location_metres(aLocation, aSize, -aSize)
     point2 = get_location_metres(aLocation, aSize, aSize)
     point3 = get_location_metres(aLocation, -aSize, aSize)
     point4 = get_location_metres(aLocation, -aSize, -aSize)
-    cmds.add(Command( 0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT, 0, 0, 0, 0, 0, 0, point1.lat, point1.lon, height))
-    cmds.add(Command( 0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT, 0, 0, 0, 0, 0, 0, point2.lat, point2.lon, height))
-    cmds.add(Command( 0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT, 0, 0, 0, 0, 0, 0, point3.lat, point3.lon, height))
-    cmds.add(Command( 0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT, 0, 0, 0, 0, 0, 0, point4.lat, point4.lon, height))
+    cmds.add(Command( 0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT, 0, 0, 0, 0, 0, 0, x1, y1, height))
+    cmds.add(Command( 0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT, 0, 0, 0, 0, 0, 0, x2, y2, height))
+    cmds.add(Command( 0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT, 0, 0, 0, 0, 0, 0, x2+(x3-x2)/3, y2+(y3-y2)/3, height))
+    cmds.add(Command( 0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT, 0, 0, 0, 0, 0, 0, x1+(x4-x1)/3, y1+(y4-y1)/3, height))
     #add dummy waypoint "5" at point 4 (lets us know when have reached destination)
-    cmds.add(Command( 0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT, 0, 0, 0, 0, 0, 0, point4.lat, point4.lon, height))    
+    cmds.add(Command( 0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT, 0, 0, 0, 0, 0, 0, (x1+x4)/3, (y1+y4)/3, height))
 
     print(" Upload new commands to vehicle")
     cmds.upload()
@@ -204,10 +214,7 @@ while True and (vehicle.location.global_relative_frame.alt  < altHeight + 1.0):
     print('Distance to waypoint (%s): %s' % (nextwaypoint, distance_to_current_waypoint()))
     print ('Height:', vehicle.location.global_relative_frame.alt)
   
-    if nextwaypoint==3: #Skip to next waypoint
-        print('Skipping to Waypoint 5 when reach waypoint 3')
-        vehicle.commands.next = 5
-    if nextwaypoint==5: #Dummy waypoint - as soon as we reach waypoint 4 this is true and we exit.
+    if nextwaypoint==6: #Dummy waypoint - as soon as we reach waypoint 4 this is true and we exit.
         print("Exit 'standard' mission when start heading to final waypoint (5)")
         break;
     time.sleep(1)
