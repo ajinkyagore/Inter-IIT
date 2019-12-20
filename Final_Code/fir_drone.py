@@ -47,8 +47,8 @@ vehicle = connect(connection_string, wait_ready=True, baud=57600)
 final_height = 2
 vehicle.parameters['WPNAV_SPEED'] = 100    
 
-xx = [0, 29.867521, 29.867889, 29.867886, 29.867522] 
-yy = [0, 77.899015, 77.899059, 77.899197,77.899149]
+xx = [0, 29.867777, 29.867472, 29.867473, 29.867780] 
+yy = [0, 77.898190, 77.898200, 77.898342, 77.89834]
 
 def get_location_metres(original_location, dNorth, dEast):
     """
