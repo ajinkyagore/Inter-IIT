@@ -14,7 +14,7 @@ from datetime import datetime
 import cv2
 import numpy as np
 import keras
-model = keras.models.load_model("interiit_model_3.model")
+model = keras.models.load_model("final_model_3.model")
 
 #Set up option parsing to get connection string
 import argparse  
